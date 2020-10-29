@@ -3,11 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>CounterButton</title>
+  <meta name="viewport" content="width=1024, initial-scale=1">
+  <link rel="stylesheet" href="01-CounterButton/styles.css">
 </head>
 <body>
 
-<!-- Решение -->
+<div id="app" v-cloak >
+  <button class="up"
+          @click="valueUp">
+    {{ value }}
+  </button>
+</div>
 
-<script type="module" src="script.js"></script>
+<script type="module" src="01-CounterButton/script.js"></script>
 </body>
 </html>
