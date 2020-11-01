@@ -47,11 +47,15 @@ const agendaItemIcons = {
 export const app = new Vue({
   el: '#app',
 
-  data: {
-    //
+  data() {
+    return {
+      meetups: null,
+      //
+    };
   },
 
   mounted() {
+    this.getData();
     // Требуется получить данные митапа с API
   },
 
@@ -60,6 +64,59 @@ export const app = new Vue({
   },
 
   methods: {
+    getData: function() {
+      fetch(`${API_URL}/meetups/6/`)
+        .then((response) => response.json())
+        .then((data) => (this.meetups = data))
+        .catch((error) => console.log('error', error));
+    },
+
+    getAgenda: function() {
+      const agenda = this.meetups.agenda;
+      return agenda;
+    },
+
+    agendaTitles: function(val) {
+      if (val.title) {
+        return val.title;
+      }
+      return agendaItemTitles[val.type];
+    },
+
+    agendaIcon: function(val) {
+      return agendaItemIcons[val.type];
+    },
+
+    getDateOnlyString(date) {
+      const YYYY = date.getFullYear();
+      const MM = (date.getMonth() + 1).toString().padStart(2, '0');
+      const DD = (date.getDate() + 1).toString().padStart(2, '0');
+      return `${YYYY}-${MM}-${DD}`;
+    },
+
+    cover(val) {
+      return getMeetupCoverLink(val);
+    },
+
+    date() {
+      return new Date(this.meetups.date);
+    },
+
+    localDate() {
+      return new Date(this.meetups.date).toLocaleDateString(
+        navigator.language,
+        {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        },
+      );
+    },
+
+    dateOnlyString() {
+      return new Date(this.meetups.date);
+    },
+
     // Получение данных с API предпочтительнее оформить отдельным методом,
     // а не писать прямо в mounted()
   },

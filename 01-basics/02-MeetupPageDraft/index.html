@@ -9,33 +9,38 @@
   <title>Meetup Page Draft</title>
 </head>
 <body>
-<div id="app">
+<div id="app" v-cloak>
   <div>
-    <div class="meetup-cover">
-      <h1 class="meetup-cover__title">Название митапа</h1>
+    <div class="meetup-cover" :style="`--bg-url: url(${cover(meetups)}`">
+      <h1 class="meetup-cover__title">{{meetups.title}}</h1>
     </div>
 
     <div class="container">
       <div class="meetup">
         <div class="meetup__content">
           <h3>Описание</h3>
-          <p class="meetup-description">Описание митапа</p>
+          <p class="meetup-description">{{ meetups.description }}</p>
 
           <h3>Программа</h3>
           <div class="meetup-agenda">
-            <p class="meetup-agenda__empty">Программа пока пуста, но когда-нибудь в ней обязательно что-нибудь появится!</p>
-            <div class="meetup-agenda__item">
-              <div class="meetup-agenda__item-col">
-                <img class="icon" alt="icon" src="/assets/icons/icon-cal-sm.svg" />
+            <p v-if="getAgenda.length<=-1" class="meetup-agenda__empty">Программа пока пуста, но когда-нибудь в ней обязательно что-нибудь появится!</p>
+            <template v-else >
+              <div v-for="item in meetups.agenda" class="meetup-agenda__item">
+                <div class="meetup-agenda__item-col">
+                  <img class="icon" alt="icon" :src="`/assets/icons/icon-${agendaIcon(item)}.svg`" />
+                </div>
+                <div class="meetup-agenda__item-col">{{ item.startsAt }} - {{ item.endsAt }}</div>
+                <div class="meetup-agenda__item-col">
+                  <h5 class="meetup-agenda__title">{{ agendaTitles(item) }}</h5>
+                  <p v-if="item.type !== 'registration' && item.speaker">
+                    <span>{{ item.speaker }}</span>
+                    <span class="meetup-agenda__dot"></span>
+                    <span class="meetup-agenda__lang">{{ item.language }}</span>
+                  </p>
+                  <p  v-if="item.description">{{ item.description }}</p>
+                </div>
               </div>
-              <div class="meetup-agenda__item-col">00:00 - 00:00</div>
-              <div class="meetup-agenda__item-col">
-                <h5 class="meetup-agenda__title">Название доклада</h5>
-                <p><span>Докладчик</span><span class="meetup-agenda__dot"></span><span class="meetup-agenda__lang">RU</span></p>
-                <p>Описание доклада</p>
-              </div>
-            </div>
-
+            </template>
           </div>
         </div>
 
@@ -43,15 +48,15 @@
           <ul class="info-list">
             <li>
               <img class="icon info-list__icon" alt="icon" src="/assets/icons/icon-user.svg" />
-              Организатор
+              {{ meetups.organizer }}
             </li>
             <li>
               <img class="icon info-list__icon" alt="icon" src="/assets/icons/icon-map.svg" />
-              Место
+              {{ meetups.place }}
             </li>
             <li>
               <img class="icon info-list__icon" alt="icon" src="/assets/icons/icon-cal-lg.svg" />
-              <time datetime="2020-02-31">31 фев. 2020</time>
+              <time :datetime="getDateOnlyString(new Date(meetups.date))">{{localDate()}} </time>
             </li>
           </ul>
         </div>
@@ -60,6 +65,6 @@
   </div>
 </div>
 
-<script type="module" src="script.js"></script>
+<script type="module" src="./02-MeetupPageDraft/script.js"></script>
 </body>
 </html>
