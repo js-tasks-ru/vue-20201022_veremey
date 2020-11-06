@@ -10,8 +10,8 @@
 </head>
 <body>
 <div id="app" v-cloak>
-  <div>
-    <div class="meetup-cover" :style="`--bg-url: url(${cover(meetups)}`">
+  <div v-if="loading">
+    <div class="meetup-cover" :style="meetupCover ? `--bg-url: url(${meetupCover}` : '' ">
       <h1 class="meetup-cover__title">{{meetups.title}}</h1>
     </div>
 
@@ -31,7 +31,7 @@
                 </div>
                 <div class="meetup-agenda__item-col">{{ item.startsAt }} - {{ item.endsAt }}</div>
                 <div class="meetup-agenda__item-col">
-                  <h5 class="meetup-agenda__title">{{ agendaTitles(item) }}</h5>
+                  <h5 class="meetup-agenda__title" v-html="agendaTitles(item)"></h5>
                   <p v-if="item.type !== 'registration' && item.speaker">
                     <span>{{ item.speaker }}</span>
                     <span class="meetup-agenda__dot"></span>
@@ -65,7 +65,7 @@
   </div>
 </div>
 
-<script type="module" src="./02-MeetupPageDraft/script.js"></script>
+<script type="module" src="script.js"></script>
 
 </body>
 </html>

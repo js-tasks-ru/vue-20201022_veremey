@@ -49,8 +49,9 @@ export const app = new Vue({
 
   data() {
     return {
+      loading: false,
       meetups: null,
-      //
+      meetupCover: null,
     };
   },
 
@@ -59,19 +60,27 @@ export const app = new Vue({
     // Требуется получить данные митапа с API
   },
 
+  watch: {
+    meetups: function () {
+      this.loading = true;
+    },
+  },
+
   computed: {
-    //
+    cover() {
+      return this.meetupCover = this.meetups.imageId ? `${API_URL}/images/${this.meetups.imageId}` : '';
+    },
   },
 
   methods: {
-    getData: function() {
+    getData: function () {
       fetch(`${API_URL}/meetups/6/`)
         .then((response) => response.json())
         .then((data) => (this.meetups = data))
         .catch((error) => console.log('error', error));
     },
 
-    getAgenda: function() {
+    getAgenda: function () {
       const agenda = this.meetups.agenda;
       return agenda;
     },
@@ -83,7 +92,7 @@ export const app = new Vue({
       return agendaItemTitles[val.type];
     },
 
-    agendaIcon: function(val) {
+    agendaIcon: function (val) {
       return agendaItemIcons[val.type];
     },
 
@@ -92,14 +101,6 @@ export const app = new Vue({
       const MM = (date.getMonth() + 1).toString().padStart(2, '0');
       const DD = (date.getDate() + 1).toString().padStart(2, '0');
       return `${YYYY}-${MM}-${DD}`;
-    },
-
-    cover(val) {
-      return getMeetupCoverLink(val);
-    },
-
-    date() {
-      return new Date(this.meetups.date);
     },
 
     localDate() {
