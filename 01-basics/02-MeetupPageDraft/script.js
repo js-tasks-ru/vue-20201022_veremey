@@ -50,8 +50,7 @@ export const app = new Vue({
   data() {
     return {
       loading: false,
-      meetups: null,
-      meetupCover: null,
+      meetup: null,
     };
   },
 
@@ -60,15 +59,9 @@ export const app = new Vue({
     // Требуется получить данные митапа с API
   },
 
-  watch: {
-    meetups: function () {
-      this.loading = true;
-    },
-  },
-
   computed: {
     cover() {
-      return this.meetupCover = this.meetups.imageId ? `${API_URL}/images/${this.meetups.imageId}` : '';
+      return this.meetup.imageId ? `${API_URL}/images/${this.meetup.imageId}` : '';
     },
   },
 
@@ -76,16 +69,16 @@ export const app = new Vue({
     getData: function () {
       fetch(`${API_URL}/meetups/6/`)
         .then((response) => response.json())
-        .then((data) => (this.meetups = data))
+        .then((data) => (this.meetup = data))
         .catch((error) => console.log('error', error));
     },
 
     getAgenda: function () {
-      const agenda = this.meetups.agenda;
+      const agenda = this.meetup.agenda;
       return agenda;
     },
 
-    agendaTitles: function(val) {
+    agendaTitles: function (val) {
       if (val.title) {
         return val.title;
       }
@@ -96,7 +89,8 @@ export const app = new Vue({
       return agendaItemIcons[val.type];
     },
 
-    getDateOnlyString(date) {
+    getDateOnlyString() {
+      const date = new Date(this.meetup.date);
       const YYYY = date.getFullYear();
       const MM = (date.getMonth() + 1).toString().padStart(2, '0');
       const DD = (date.getDate() + 1).toString().padStart(2, '0');
@@ -104,18 +98,11 @@ export const app = new Vue({
     },
 
     localDate() {
-      return new Date(this.meetups.date).toLocaleDateString(
-        navigator.language,
-        {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        },
-      );
-    },
-
-    dateOnlyString() {
-      return new Date(this.meetups.date);
+      return new Date(this.meetup.date).toLocaleDateString(navigator.language, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
     },
 
     // Получение данных с API предпочтительнее оформить отдельным методом,
