@@ -49,7 +49,6 @@ export const app = new Vue({
 
   data() {
     return {
-      loading: false,
       meetup: null,
     };
   },
@@ -63,6 +62,28 @@ export const app = new Vue({
     cover() {
       return this.meetup.imageId ? `${API_URL}/images/${this.meetup.imageId}` : '';
     },
+
+    getDateOnlyString() {
+      const date = new Date(this.meetup.date);
+      const YYYY = date.getFullYear();
+      const MM = (date.getMonth() + 1).toString().padStart(2, '0');
+      const DD = (date.getDate() + 1).toString().padStart(2, '0');
+
+      return `${YYYY}-${MM}-${DD}`;
+    },
+
+    localDate() {
+      const date = new Date(this.meetup.date).toLocaleDateString(
+        navigator.language,
+        {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        },
+      );
+
+      return date;
+    },
   },
 
   methods: {
@@ -71,11 +92,6 @@ export const app = new Vue({
         .then((response) => response.json())
         .then((data) => (this.meetup = data))
         .catch((error) => console.log('error', error));
-    },
-
-    getAgenda: function () {
-      const agenda = this.meetup.agenda;
-      return agenda;
     },
 
     agendaTitles: function (val) {
@@ -87,22 +103,6 @@ export const app = new Vue({
 
     agendaIcon: function (val) {
       return agendaItemIcons[val.type];
-    },
-
-    getDateOnlyString() {
-      const date = new Date(this.meetup.date);
-      const YYYY = date.getFullYear();
-      const MM = (date.getMonth() + 1).toString().padStart(2, '0');
-      const DD = (date.getDate() + 1).toString().padStart(2, '0');
-      return `${YYYY}-${MM}-${DD}`;
-    },
-
-    localDate() {
-      return new Date(this.meetup.date).toLocaleDateString(navigator.language, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      });
     },
 
     // Получение данных с API предпочтительнее оформить отдельным методом,
