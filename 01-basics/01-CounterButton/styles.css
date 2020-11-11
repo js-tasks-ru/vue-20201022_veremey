@@ -1,0 +1,17 @@
+#app {
+  text-align: center;
+  padding: 80px;
+  background-color: peachpuff;
+}
+
+.up {
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.counter__input {
+  display: inline-block;
+  width: 50px;
+  text-align: center;
+  color: #fff;
+}
