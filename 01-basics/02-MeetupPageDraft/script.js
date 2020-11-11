@@ -50,12 +50,13 @@ export const app = new Vue({
   data() {
     return {
       meetup: null,
+      //agenda: null,
     };
   },
 
   mounted() {
     this.getData();
-    // Требуется получить данные митапа с API
+    //this.agendas();
   },
 
   computed: {
@@ -84,6 +85,15 @@ export const app = new Vue({
 
       return date;
     },
+
+    // берем параметры и изменяем их - здесь такого нельзя делать, верно?
+    agendas() {
+      return this.meetup.agenda.map((item) => ({
+        ...item,
+        title: item.title || agendaItemTitles[item.type],
+        icon: agendaItemIcons[item.type],
+      }));
+    },
   },
 
   methods: {
@@ -92,17 +102,6 @@ export const app = new Vue({
         .then((response) => response.json())
         .then((data) => (this.meetup = data))
         .catch((error) => console.log('error', error));
-    },
-
-    agendaTitles: function (val) {
-      if (val.title) {
-        return val.title;
-      }
-      return agendaItemTitles[val.type];
-    },
-
-    agendaIcon: function (val) {
-      return agendaItemIcons[val.type];
     },
 
     // Получение данных с API предпочтительнее оформить отдельным методом,
