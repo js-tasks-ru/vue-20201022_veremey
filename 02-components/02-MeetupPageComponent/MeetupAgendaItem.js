@@ -1,19 +1,21 @@
+import { agendaItemIcons, agendaItemTitles } from './data.js';
+
 export const MeetupAgendaItem = {
   name: 'MeetupAgendaItem',
 
   template: `<div class="meetup-agenda__item">
       <div class="meetup-agenda__item-col">
-        <img class="icon" alt="icon" :src="agendaItem.icon"/>
+        <img class="icon" alt="icon" :src="agendaItemArray.icon"/>
       </div>
-      <div class="meetup-agenda__item-col">{{ agendaItem.startsAt }} - {{ agendaItem.endsAt }}</div>
+      <div class="meetup-agenda__item-col">{{ agendaItemArray.startsAt }} - {{ agendaItemArray.endsAt }}</div>
       <div class="meetup-agenda__item-col">
-        <h5 class="meetup-agenda__title">{{ agendaItem.title || "Регистрация"  }}</h5>
-        <p v-if="agendaItem.speaker">
-          <span>{{ agendaItem.speaker }}</span>
+        <h5 class="meetup-agenda__title">{{ agendaItemArray.title || "Регистрация"  }}</h5>
+        <p v-if="agendaItemArray.speaker">
+          <span>{{ agendaItemArray.speaker }}</span>
           <span class="meetup-agenda__dot"></span>
-          <span class="meetup-agenda__lang">{{ agendaItem.language }}</span>
+          <span class="meetup-agenda__lang">{{ agendaItemArray.language }}</span>
         </p>
-        <p v-if="agendaItem.description">{{ agendaItem.description }}</p>
+        <p v-if="agendaItemArray.description">{{ agendaItemArray.description }}</p>
       </div>
     </div>`,
 
@@ -23,4 +25,14 @@ export const MeetupAgendaItem = {
       required: true,
     },
   },
+
+  computed: {
+    agendaItemArray() {
+      return {
+        ...this.agendaItem,
+        title: this.agendaItem.title || agendaItemTitles[this.agendaItem.type],
+        icon: `/assets/icons/icon-${agendaItemIcons[this.agendaItem.type]}.svg`,
+      }
+    },
+  }
 };

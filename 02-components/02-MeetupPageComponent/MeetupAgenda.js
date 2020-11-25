@@ -7,8 +7,8 @@ export const MeetupAgenda = {
     <div class="meetup-agenda">
       <p v-if="agenda.length <= -1" class="meetup-agenda__empty">Программа пока пуста, но когда-нибудь в ней обязательно что-нибудь появится!</p>
 
-      <template v-else v-for="item, i in agenda" >
-        <meetup-agenda-item :agendaItem="agendaItem[i]"/>
+      <template v-else v-for="item in agenda" >
+        <meetup-agenda-item :agendaItem="item"/>
       </template>
     </div>`,
 
@@ -20,20 +20,6 @@ export const MeetupAgenda = {
     agenda: {
       type: Array,
       required: true,
-    },
-  },
-
-  computed: {
-    agendaItem() {
-      return { ...this.agendaItemArray };
-    },
-
-    agendaItemArray() {
-      return this.agenda.map( (item) => ({
-        ...item,
-        title: item.title || agendaItemTitles[item.type],
-        icon: `/assets/icons/icon-${agendaItemIcons[item.type]}.svg`,
-      }));
     },
   },
 
