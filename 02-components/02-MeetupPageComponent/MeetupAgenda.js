@@ -1,14 +1,26 @@
-// import { MeetupAgendaItem } from './MeetupAgendaItem.js';
+import { MeetupAgendaItem } from './MeetupAgendaItem.js';
+import { agendaItemIcons, agendaItemTitles } from './data.js';
 
 export const MeetupAgenda = {
   name: 'MeetupAgenda',
-
   template: `
     <div class="meetup-agenda">
-      <div class="meetup-agenda__item"></div>
+      <p v-if="agenda.length <= -1" class="meetup-agenda__empty">Программа пока пуста, но когда-нибудь в ней обязательно что-нибудь появится!</p>
+
+      <template v-else v-for="item in agenda" >
+        <meetup-agenda-item :agendaItem="item"/>
+      </template>
     </div>`,
 
-  // components
+  components: {
+    MeetupAgendaItem,
+  },
 
-  // props
+  props: {
+    agenda: {
+      type: Array,
+      required: true,
+    },
+  },
+
 };
